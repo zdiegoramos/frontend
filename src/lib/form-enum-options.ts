@@ -1,21 +1,33 @@
 import type { ZodType } from "zod/v4";
 
-type EnumDef = {
-  type: "enum";
-  entries: Record<string, string>;
+type AnyDef = {
+  type: string;
+  entries?: Record<string, string>;
+  innerType?: unknown;
 };
+
+function findEnumDef(schema: ZodType): { entries: Record<string, string> } {
+  const def = (schema as unknown as { _zod: { def: AnyDef } })._zod.def;
+
+  if (def.type === "enum" && def.entries) {
+    return def as { entries: Record<string, string> };
+  }
+
+  const wrappedTypes = ["default", "prefault", "optional", "nullable", "catch"];
+  if (wrappedTypes.includes(def.type) && def.innerType) {
+    return findEnumDef(def.innerType as ZodType);
+  }
+
+  throw new Error("getEnumOptions: schema must be a z.enum()");
+}
 
 export function getEnumOptions(
   schema: ZodType,
   labelMap?: Record<string, string>
 ): { value: string; label: string }[] {
-  const def = (schema as unknown as { _zod: { def: EnumDef } })._zod.def;
+  const { entries } = findEnumDef(schema);
 
-  if (def.type !== "enum") {
-    throw new Error("getEnumOptions: schema must be a z.enum()");
-  }
-
-  return Object.keys(def.entries).map((value) => ({
+  return Object.keys(entries).map((value) => ({
     value,
     label:
       labelMap?.[value] ??
