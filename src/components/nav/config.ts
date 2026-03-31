@@ -1,9 +1,9 @@
 import {
-  FileText,
   HomeIcon,
   LayoutGrid,
   type LucideIcon,
   Receipt,
+  WrenchIcon,
 } from "lucide-react";
 
 /**
@@ -40,10 +40,10 @@ export const USER_NAV_ROUTES = [
     activePatterns: ["/forms", "/forms/*"],
   },
   {
-    href: "/profile",
-    name: "Profile",
-    icon: FileText,
-    activePatterns: ["/profile", "/profile/*"],
+    href: "/tools",
+    name: "Tools",
+    icon: WrenchIcon,
+    activePatterns: ["/tools", "/tools/*"],
   },
 ] as const satisfies readonly NavRoute[];
 
