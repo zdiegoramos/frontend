@@ -7,10 +7,16 @@ import { isRouteActive } from "@/components/nav/config";
 import { Item, ItemGroup, ItemMedia } from "@/components/ui/item";
 import { WireframeSidebar } from "@/components/ui/wireframe";
 import { cn } from "@/lib/utils";
+import { useAppState } from "@/providers/app-state-provider";
 import { TOOLS_NAV } from "./tools";
 
 export function ToolsSidebar() {
   const pathname = usePathname();
+  const { isMobile } = useAppState();
+
+  if (isMobile) {
+    return null;
+  }
 
   return (
     <WireframeSidebar className="border-r bg-background" position="left">
