@@ -3,6 +3,7 @@ import "../lib/orpc.server";
 import "./globals.css";
 import type { Metadata } from "next";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { ServiceWorkerRegister } from "@/components/service-worker-register";
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/providers/theme-provider";
@@ -15,7 +16,7 @@ const fontMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Init",
+  title: "App",
   description: "This is an app",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
@@ -40,6 +41,7 @@ export default function RootLayout({
         <ThemeProvider>
           <NuqsAdapter>{children}</NuqsAdapter>
           <Toaster />
+          <ServiceWorkerRegister />
         </ThemeProvider>
       </body>
     </html>

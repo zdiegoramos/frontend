@@ -8,6 +8,7 @@ export function WireframeDefault({ children }: { children: React.ReactNode }) {
           topLeft: "navbar",
           bottomLeft: "navbar",
         },
+        safeAreas: true,
       }}
     >
       <div className="px-4 pt-4">{children}</div>
