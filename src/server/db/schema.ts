@@ -318,4 +318,91 @@ export const insertPlanSchema = createInsertSchema(plan, {
   type: enumField(planTypeEnum.enumValues, { label: "Plan" }),
 }).strict();
 
-export default { user, post, widget, bug, plan };
+// ─── CREDIT CARD TABLE ───────────────────────────────────────────────────────
+
+export const cardBrandEnum = pgEnum("card_brand", [
+  "visa",
+  "mastercard",
+  "amex",
+  "discover",
+  "unknown",
+]);
+
+export type CardBrand = (typeof cardBrandEnum.enumValues)[number];
+
+export const expiryMonthEnum = pgEnum("expiry_month", [
+  "01",
+  "02",
+  "03",
+  "04",
+  "05",
+  "06",
+  "07",
+  "08",
+  "09",
+  "10",
+  "11",
+  "12",
+]);
+
+export type ExpiryMonth = (typeof expiryMonthEnum.enumValues)[number];
+
+export const creditCard = pgTable(
+  "credit_card",
+  {
+    id: bigint("id", { mode: "bigint" })
+      .primaryKey()
+      .generatedAlwaysAsIdentity(),
+
+    nanoId: varchar("nano_id", { length: NANO_ID_LENGTH })
+      .$defaultFn(() => myNanoid())
+      .notNull()
+      .unique(),
+
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .$defaultFn(() => new Date())
+      .notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .$defaultFn(() => new Date())
+      .$onUpdate(() => new Date())
+      .notNull(),
+
+    cardholderName: varchar("cardholder_name", { length: 100 }).notNull(),
+    // Only the last 4 digits are stored — full PANs must never be persisted.
+    lastFourDigits: varchar("last_four_digits", { length: 4 }).notNull(),
+    expiryMonth: expiryMonthEnum("expiry_month").notNull(),
+    expiryYear: varchar("expiry_year", { length: 4 }).notNull(),
+    brand: cardBrandEnum("brand").notNull().default("unknown"),
+  },
+  (t) => [uniqueIndex("credit_card_nano_id_idx").on(t.nanoId)]
+);
+
+export const selectCreditCardSchema = createSelectSchema(creditCard);
+
+export const insertCreditCardSchema = createInsertSchema(creditCard, {
+  cardholderName: textField({
+    chars: { preset: "name" },
+    label: "Name on Card",
+    placeholder: "John Doe",
+  })
+    .min(2, "Must be at least 2 characters")
+    .max(100, "Cannot exceed 100 characters"),
+  lastFourDigits: textField({
+    chars: { custom: ["numbers"] },
+    label: "Last Four Digits",
+  })
+    .length(4, "Must be exactly 4 digits")
+    .regex(/^\d{4}$/, "Must contain only digits"),
+  expiryMonth: enumField(expiryMonthEnum.enumValues, {
+    label: "Month",
+    placeholder: "MM",
+  }),
+  expiryYear: textField({
+    chars: { custom: ["numbers"] },
+    label: "Year",
+    placeholder: "YYYY",
+  }).regex(/^\d{4}$/, "Select a valid year"),
+  brand: enumField(cardBrandEnum.enumValues, { label: "Card Brand" }),
+}).strict();
+
+export default { user, post, widget, bug, plan, creditCard };

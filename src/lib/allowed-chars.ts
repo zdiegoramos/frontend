@@ -117,9 +117,7 @@ export function textField(meta: TextFieldMeta) {
 export function enumField<T extends string>(values: T[], meta: FormInputMeta) {
   return z
     .enum([EMPTY_STRING, ...values])
-    .transform((value, ctx): T => {
-      return emptyStringNotAllowed(value as T, ctx);
-    })
+    .transform((value, ctx): T => emptyStringNotAllowed(value as T, ctx))
     .meta(meta);
 }
 

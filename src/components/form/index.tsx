@@ -1,6 +1,8 @@
 import { createFormHook, createFormHookContexts } from "@tanstack/react-form";
+import { CardNumberInput } from "./card-number-input";
 import { ChoiceInput } from "./choice-input";
 import { CurrencyInput } from "./currency-input";
+import { CvvInput } from "./cvv-input";
 import { DateInput } from "./date-input";
 import { DateRangeInput } from "./date-range-input";
 import { DecimalInput } from "./decimal-input";
@@ -19,9 +21,11 @@ export const { fieldContext, useFieldContext, formContext, useFormContext } =
 
 export const { useAppForm, withForm } = createFormHook({
   fieldComponents: {
+    CardNumberInput,
     ChoiceInput,
     CountryCodeInput,
     CurrencyInput,
+    CvvInput,
     DateInput,
     DateRangeInput,
     DecimalInput,

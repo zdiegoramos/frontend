@@ -4,7 +4,9 @@ import { z } from "zod/v4";
 import { db } from "@/server/db";
 import {
   bug as bugTable,
+  creditCard as creditCardTable,
   insertBugSchema,
+  insertCreditCardSchema,
   insertPlanSchema,
   insertUserSchema,
   insertWidgetSchema,
@@ -109,11 +111,30 @@ const planRouter = {
     }),
 };
 
+const creditCardRouter = {
+  create: os
+    .input(
+      insertCreditCardSchema.omit({
+        updatedAt: true,
+        createdAt: true,
+        nanoId: true,
+      })
+    )
+    .handler(async ({ input }) => {
+      const [card] = await db.insert(creditCardTable).values(input).returning();
+      if (!card) {
+        throw new Error("Failed to save credit card");
+      }
+      return { creditCard: card };
+    }),
+};
+
 export const appRouter = {
   widget: widgetRouter,
   user: userRouter,
   bug: bugRouter,
   plan: planRouter,
+  creditCard: creditCardRouter,
 };
 
 export type AppRouter = typeof appRouter;

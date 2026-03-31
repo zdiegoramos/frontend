@@ -8,6 +8,13 @@
       "when": 1774902486645,
       "tag": "0000_majestic_rhino",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1774906630871,
+      "tag": "0001_credit_card",
+      "breakpoints": true
     }
   ]
 }
