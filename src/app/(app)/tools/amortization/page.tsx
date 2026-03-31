@@ -1,9 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ToolsNav } from "@/components/nav/section-nav";
-import { WireframeDefault } from "@/components/wireframe-default";
-import { Providers } from "@/providers";
 import type { AmortizationInputValues } from "./components/amortization-inputs";
 import {
   AmortizationInputs,
@@ -86,57 +83,52 @@ export default function AmortizationPage() {
   }
 
   return (
-    <WireframeDefault>
-      <Providers>
-        <ToolsNav />
-        <main className="mx-auto max-w-4xl px-4 py-8">
-          <div className="mb-6">
-            <h1 className="font-bold text-2xl">Amortization Calculator</h1>
-            <p className="mt-1 text-muted-foreground text-sm">
-              Calculate your loan repayment schedule instantly.
-            </p>
-          </div>
+    <main className="mx-auto max-w-4xl px-4 py-8">
+      <div className="mb-6">
+        <h1 className="font-bold text-2xl">Amortization Calculator</h1>
+        <p className="mt-1 text-muted-foreground text-sm">
+          Calculate your loan repayment schedule instantly.
+        </p>
+      </div>
 
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            <div>
-              <AmortizationInputs
-                onChange={setInputs}
-                onClear={handleClear}
-                values={inputs}
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div>
+          <AmortizationInputs
+            onChange={setInputs}
+            onClear={handleClear}
+            values={inputs}
+          />
+        </div>
+
+        <div className="flex flex-col gap-6">
+          {result ? (
+            <>
+              <AmortizationSummary result={result} />
+              <AmortizationPieChart
+                totalInterest={result.totalInterest}
+                totalPayments={result.totalPayments}
               />
-            </div>
-
-            <div className="flex flex-col gap-6">
-              {result ? (
-                <>
-                  <AmortizationSummary result={result} />
-                  <AmortizationPieChart
-                    totalInterest={result.totalInterest}
-                    totalPayments={result.totalPayments}
-                  />
-                  <AmortizationLineChart
-                    monthlyPayment={result.monthlyPayment}
-                    yearlySchedule={result.yearlySchedule}
-                  />
-                </>
-              ) : (
-                <div className="flex h-full items-center justify-center rounded-2xl border border-dashed p-8 text-center text-muted-foreground text-sm">
-                  Enter valid loan details to see your repayment schedule.
-                </div>
-              )}
-            </div>
-          </div>
-
-          {result && (
-            <div className="mt-6">
-              <AmortizationTable
-                monthlySchedule={result.monthlySchedule}
+              <AmortizationLineChart
+                monthlyPayment={result.monthlyPayment}
                 yearlySchedule={result.yearlySchedule}
               />
+            </>
+          ) : (
+            <div className="flex h-full items-center justify-center rounded-2xl border border-dashed p-8 text-center text-muted-foreground text-sm">
+              Enter valid loan details to see your repayment schedule.
             </div>
           )}
-        </main>
-      </Providers>
-    </WireframeDefault>
+        </div>
+      </div>
+
+      {result && (
+        <div className="mt-6">
+          <AmortizationTable
+            monthlySchedule={result.monthlySchedule}
+            yearlySchedule={result.yearlySchedule}
+          />
+        </div>
+      )}
+    </main>
   );
 }
