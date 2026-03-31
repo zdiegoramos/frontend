@@ -1,5 +1,7 @@
 "use client";
 
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { isRouteActive } from "@/components/nav/config";
 import { WireframeNav } from "@/components/ui/wireframe";
@@ -34,7 +36,13 @@ export function SectionNav({
 
   return (
     <WireframeNav className="border-t bg-background" position="bottom">
-      <div className="flex h-full items-center px-4">
+      <div className="flex h-full items-center gap-2 px-4">
+        <Link
+          className="flex shrink-0 items-center gap-1 rounded-md p-2 text-muted-foreground text-sm hover:bg-muted hover:text-foreground"
+          href="/"
+        >
+          <ArrowLeft className="size-4" />
+        </Link>
         <label className="flex flex-1 items-center gap-2">
           <span className="shrink-0 font-medium text-muted-foreground text-sm">
             {label}:

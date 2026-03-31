@@ -1,6 +1,7 @@
 "use client";
 
 import { SiGithub } from "@icons-pack/react-simple-icons";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { isRouteActive } from "@/components/nav/config";
@@ -22,6 +23,13 @@ export function ToolsSidebar() {
     <WireframeSidebar className="border-r bg-background" position="left">
       <div className="flex h-full flex-col gap-2 p-3">
         <div className="px-3 py-2">
+          <Link
+            className="mb-2 flex items-center gap-1 text-muted-foreground text-xs hover:text-foreground"
+            href="/"
+          >
+            <ArrowLeft className="size-3" />
+            Home
+          </Link>
           <p className="font-semibold text-sm">Tools</p>
           <p className="text-muted-foreground text-xs">Utility examples</p>
         </div>
