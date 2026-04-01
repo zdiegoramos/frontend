@@ -1,5 +1,23 @@
 # Stack
 
+A modern full-stack Next.js starter.
+
+## Tech Stack
+
+| Category   | Technology                     |
+| ---------- | ------------------------------ |
+| Framework  | Next.js 16 + React 19          |
+| Language   | TypeScript 6                   |
+| Styling    | Tailwind CSS v4                |
+| Components | shadcn/ui + Base UI            |
+| Database   | PostgreSQL + Drizzle ORM       |
+| API        | oRPC (type-safe RPC)           |
+| Forms      | TanStack Form + Zod v4         |
+| Tables     | TanStack Table                 |
+| PWA        | Serwist (Turbopack)            |
+| Testing    | Vitest                         |
+| Linting    | Biome + Ultracite              |
+
 ## Setup
 
 ```bash

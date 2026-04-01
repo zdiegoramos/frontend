@@ -35,6 +35,7 @@ export default function Home() {
               { label: "API", value: "oRPC (type-safe RPC)" },
               { label: "Forms", value: "TanStack Form + Zod v4" },
               { label: "Tables", value: "TanStack Table" },
+              { label: "PWA", value: "Serwist (Turbopack)" },
               { label: "Testing", value: "Vitest" },
               { label: "Linting", value: "Biome + Ultracite" },
             ].map(({ label, value }) => (
