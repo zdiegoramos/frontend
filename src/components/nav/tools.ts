@@ -1,4 +1,4 @@
-import { CalculatorIcon, HashIcon } from "lucide-react";
+import { CalculatorIcon, HashIcon, ReceiptIcon } from "lucide-react";
 
 export const TOOLS_NAV = [
   {
@@ -14,5 +14,12 @@ export const TOOLS_NAV = [
     href: "/tools/calculator",
     icon: HashIcon,
     activePatterns: ["/tools/calculator", "/tools/calculator/*"],
+  },
+  {
+    name: "Invoice Tracker",
+    description: "Extract and record expenses from PDF and image invoices.",
+    href: "/tools/invoice",
+    icon: ReceiptIcon,
+    activePatterns: ["/tools/invoice", "/tools/invoice/*"],
   },
 ];

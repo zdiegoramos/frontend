@@ -1,5 +1,5 @@
 import { os } from "@orpc/server";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { z } from "zod/v4";
 import { db } from "@/server/db";
 import {
@@ -9,9 +9,11 @@ import {
   insertAddressSchema,
   insertBugSchema,
   insertCreditCardSchema,
+  insertInvoiceSchema,
   insertPlanSchema,
   insertUserSchema,
   insertWidgetSchema,
+  invoice as invoiceTable,
   plan as planTable,
   user as userTable,
   widget as widgetTable,
@@ -207,6 +209,64 @@ const creditCardRouter = {
     }),
 };
 
+const invoiceRouter = {
+  create: os
+    .input(
+      insertInvoiceSchema.omit({
+        createdAt: true,
+        updatedAt: true,
+      })
+    )
+    .handler(async ({ input }) => {
+      const [record] = await db.insert(invoiceTable).values(input).returning();
+      if (!record) {
+        throw new Error("Failed to create invoice");
+      }
+      return { invoice: record };
+    }),
+
+  list: os.handler(async () => {
+    return await db
+      .select()
+      .from(invoiceTable)
+      .orderBy(desc(invoiceTable.date));
+  }),
+
+  update: os
+    .input(
+      z.object({
+        nanoId: z.string(),
+        data: insertInvoiceSchema
+          .omit({ createdAt: true, updatedAt: true })
+          .partial(),
+      })
+    )
+    .handler(async ({ input }) => {
+      const [record] = await db
+        .update(invoiceTable)
+        .set(input.data)
+        .where(eq(invoiceTable.nanoId, input.nanoId))
+        .returning();
+      if (!record) {
+        throw new Error("Invoice not found");
+      }
+      return { invoice: record };
+    }),
+
+  delete: os
+    .input(z.object({ nanoId: z.string() }))
+    .handler(async ({ input }) => {
+      const [record] = await db
+        .delete(invoiceTable)
+        .where(eq(invoiceTable.nanoId, input.nanoId))
+        .returning();
+      if (!record) {
+        throw new Error("Invoice not found");
+      }
+      return { invoice: record };
+    }),
+};
+
 export const appRouter = {
   widget: widgetRouter,
   user: userRouter,
@@ -214,6 +274,7 @@ export const appRouter = {
   plan: planRouter,
   creditCard: creditCardRouter,
   address: addressRouter,
+  invoice: invoiceRouter,
 };
 
 export type AppRouter = typeof appRouter;

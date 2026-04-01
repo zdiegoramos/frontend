@@ -1,0 +1,12 @@
+export default function InvoicePage() {
+  return (
+    <main className="mx-auto max-w-4xl px-4 py-8">
+      <div className="mb-6">
+        <h1 className="font-bold text-2xl">Invoice Expense Tracker</h1>
+        <p className="mt-1 text-muted-foreground text-sm">
+          Drop PDF or image invoices to extract and record expenses.
+        </p>
+      </div>
+    </main>
+  );
+}
