@@ -17,7 +17,12 @@ import {
   ItemMedia,
   ItemSeparator,
 } from "@/components/ui/item";
-import { WireframeSidebar } from "@/components/ui/wireframe";
+import {
+  WireframeSidebar,
+  WireframeSidebarContent,
+  WireframeSidebarGroup,
+  WireframeSidebarHeader,
+} from "@/components/ui/wireframe";
 
 type SidebarItem = {
   name: string;
@@ -55,14 +60,16 @@ const sections: SidebarSection[] = [
 export function AppSidebar() {
   return (
     <WireframeSidebar className="border-r bg-background" position="left">
-      <div className="flex h-full flex-col gap-4 p-3">
+      <WireframeSidebarHeader className="p-3">
         <div className="px-2 py-3">
           <NavLogoWithText />
         </div>
+      </WireframeSidebarHeader>
 
-        <nav className="flex flex-1 flex-col gap-1">
+      <WireframeSidebarContent className="p-3">
+        <nav className="flex flex-col gap-1">
           {sections.map((section, i) => (
-            <div key={section.title}>
+            <WireframeSidebarGroup key={section.title}>
               {i > 0 && <ItemSeparator />}
               <ItemGroup>
                 <p className="px-3 py-1 font-medium text-muted-foreground text-xs">
@@ -82,10 +89,10 @@ export function AppSidebar() {
                   </Item>
                 ))}
               </ItemGroup>
-            </div>
+            </WireframeSidebarGroup>
           ))}
         </nav>
-      </div>
+      </WireframeSidebarContent>
     </WireframeSidebar>
   );
 }

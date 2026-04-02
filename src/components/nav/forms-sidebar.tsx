@@ -6,7 +6,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { isRouteActive } from "@/components/nav/config";
 import { Item, ItemGroup, ItemMedia } from "@/components/ui/item";
-import { WireframeSidebar } from "@/components/ui/wireframe";
+import {
+  WireframeSidebar,
+  WireframeSidebarContent,
+  WireframeSidebarFooter,
+  WireframeSidebarHeader,
+} from "@/components/ui/wireframe";
 import { APP } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
 import { useAppState } from "@/providers/app-state-provider";
@@ -22,7 +27,7 @@ export function FormsSidebar() {
 
   return (
     <WireframeSidebar className="border-r bg-background" position="left">
-      <div className="flex h-full flex-col gap-2 p-3">
+      <WireframeSidebarHeader className="p-3">
         <div className="px-3 py-2">
           <Link
             className="mb-2 flex items-center gap-1 text-muted-foreground text-xs hover:text-foreground"
@@ -34,8 +39,10 @@ export function FormsSidebar() {
           <p className="font-semibold text-sm">Forms</p>
           <p className="text-muted-foreground text-xs">Component examples</p>
         </div>
+      </WireframeSidebarHeader>
 
-        <nav className="flex flex-1 flex-col gap-1">
+      <WireframeSidebarContent className="p-3">
+        <nav className="flex flex-col gap-1">
           <ItemGroup>
             {FORMS_NAV.map((item) => {
               const isActive = isRouteActive(pathname, item.activePatterns);
@@ -70,7 +77,9 @@ export function FormsSidebar() {
             })}
           </ItemGroup>
         </nav>
+      </WireframeSidebarContent>
 
+      <WireframeSidebarFooter className="p-3">
         <a
           className="flex items-center gap-2 rounded-md px-3 py-2 text-muted-foreground text-sm transition-colors hover:bg-muted hover:text-foreground"
           href={APP.github.url}
@@ -80,7 +89,7 @@ export function FormsSidebar() {
           <SiGithub className="size-4 shrink-0" />
           <span>View on GitHub</span>
         </a>
-      </div>
+      </WireframeSidebarFooter>
     </WireframeSidebar>
   );
 }
