@@ -2,7 +2,7 @@
 id: "002"
 title: Invoice table UI — list, edit, delete
 prd: "0003"
-status: open
+status: closed
 type: afk
 blocked_by: ["001"]
 created: 2026-04-01
@@ -18,12 +18,12 @@ Build the `InvoiceTable` component on the `/invoice` page using TanStack Table (
 
 ## Acceptance criteria
 
-- [ ] Table renders all saved invoices with correct columns
-- [ ] Empty state shown when no invoices exist
-- [ ] Loading state shown while data is fetching
-- [ ] Delete removes the row after confirmation and refreshes the list
-- [ ] Inline edit pre-populates all fields and persists changes via `invoice.update`
-- [ ] Table is demoable by seeding a record directly in the DB
+- [x] Table renders all saved invoices with correct columns
+- [x] Empty state shown when no invoices exist
+- [x] Loading state shown while data is fetching
+- [x] Delete removes the row after confirmation and refreshes the list
+- [x] Inline edit pre-populates all fields and persists changes via `invoice.update`
+- [x] Table is demoable by seeding a record directly in the DB
 
 ## Blocked by
 
@@ -34,3 +34,7 @@ Build the `InvoiceTable` component on the `/invoice` page using TanStack Table (
 - User story 13 (see all invoices)
 - User story 14 (edit a saved invoice)
 - User story 15 (delete a saved invoice)
+
+## Completion
+
+Created `invoice-table.tsx` as a client component with TanStack Table. Columns: merchant, date, amount, currency, category, description, tax, actions. Edit opens a Dialog pre-populated with all fields and saves via `invoice.update`. Delete shows an AlertDialog confirmation then calls `invoice.delete`. Both mutations refresh the list via re-fetch. Skeleton shown during initial load; empty state message shown when no invoices exist. Updated `page.tsx` to compose the table beneath the page heading. Uses `@base-ui/react`'s `render` prop pattern (not Radix's `asChild`) for styled triggers. All 33 tests still pass.

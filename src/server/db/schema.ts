@@ -3,6 +3,7 @@ import {
   bigint,
   index,
   integer,
+  numeric,
   pgEnum,
   pgTable,
   text,
@@ -13,6 +14,7 @@ import {
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod/v4";
 import {
+  decimalField,
   enumField,
   integerField,
   textField,
@@ -510,4 +512,71 @@ export const insertAddressSchema = createInsertSchema(address, {
     .max(100, "Cannot exceed 100 characters"),
 }).strict();
 
-export default { user, post, widget, bug, plan, creditCard, address };
+// ─── INVOICE TABLE ───────────────────────────────────────────────────────────
+
+export const invoice = pgTable(
+  "invoice",
+  {
+    id: bigint("id", { mode: "bigint" })
+      .primaryKey()
+      .generatedAlwaysAsIdentity(),
+
+    nanoId: varchar("nano_id", { length: NANO_ID_LENGTH })
+      .$defaultFn(() => myNanoid())
+      .notNull()
+      .unique(),
+
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .$defaultFn(() => new Date())
+      .notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .$defaultFn(() => new Date())
+      .$onUpdate(() => new Date())
+      .notNull(),
+
+    merchant: varchar("merchant", { length: 200 }).notNull(),
+    date: timestamp("date", { withTimezone: true }).notNull(),
+    amount: numeric("amount", { precision: 12, scale: 2 }).notNull(),
+    currency: varchar("currency", { length: 10 }).notNull(),
+    category: varchar("category", { length: 100 }).notNull(),
+    description: text("description").notNull(),
+    tax: numeric("tax", { precision: 12, scale: 2 }).notNull(),
+  },
+  (t) => [uniqueIndex("invoice_nano_id_idx").on(t.nanoId)]
+);
+
+export const selectInvoiceSchema = createSelectSchema(invoice);
+
+export const insertInvoiceSchema = createInsertSchema(invoice, {
+  merchant: textField({
+    chars: { preset: "prose" },
+    label: "Merchant",
+    placeholder: "Acme Corp",
+  })
+    .min(1, "Required")
+    .max(200, "Cannot exceed 200 characters"),
+  // z.coerce.date() accepts ISO strings (e.g. from JSON serialization over RPC)
+  date: z.coerce.date(),
+  currency: textField({
+    chars: { custom: ["letters"] },
+    label: "Currency",
+    placeholder: "USD",
+  })
+    .min(1, "Required")
+    .max(10, "Cannot exceed 10 characters"),
+  category: textField({
+    chars: { preset: "prose" },
+    label: "Category",
+    placeholder: "Software",
+  })
+    .min(1, "Required")
+    .max(100, "Cannot exceed 100 characters"),
+  description: textField({
+    chars: { preset: "multiline" },
+    label: "Description",
+  }).min(1, "Required"),
+  amount: decimalField({ label: "Amount" }),
+  tax: decimalField({ label: "Tax" }),
+}).strict();
+
+export default { user, post, widget, bug, plan, creditCard, address, invoice };
