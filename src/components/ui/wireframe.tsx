@@ -4,39 +4,8 @@ import type { ClassValue } from "clsx";
 import { createContext, useContext, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
-const WF_NAV_BREAKPOINT = 768;
-
-type WireframeContextValue = {
-  windowWidth: number;
-  isMobile: boolean;
-};
-
-const WireframeContext = createContext<WireframeContextValue | undefined>(
-  undefined
-);
-
-export function useWireframe() {
-  const context = useContext(WireframeContext);
-  if (!context) {
-    throw new Error("useWireframe must be used within a Wireframe");
-  }
-  return context;
-}
-
-function useWindowWidth() {
-  const [width, setWidth] = useState<number | null>(null);
-
-  useEffect(() => {
-    setWidth(window.innerWidth);
-    const handler = () => setWidth(window.innerWidth);
-    window.addEventListener("resize", handler);
-    return () => window.removeEventListener("resize", handler);
-  }, []);
-
-  return width;
-}
-
 const defaults = {
+  mobileBreakpoint: 768,
   safeAreas: true,
   cssVariables: {
     "--sticky-nav-height": 12,
@@ -80,6 +49,36 @@ const defaults = {
   },
 } as const satisfies WireframeConfig;
 
+type WireframeContextValue = {
+  windowWidth: number;
+  isMobile: boolean;
+};
+
+const WireframeContext = createContext<WireframeContextValue | undefined>(
+  undefined
+);
+
+export function useWireframe() {
+  const context = useContext(WireframeContext);
+  if (!context) {
+    throw new Error("useWireframe must be used within a Wireframe");
+  }
+  return context;
+}
+
+function useWindowWidth() {
+  const [width, setWidth] = useState<number | null>(null);
+
+  useEffect(() => {
+    setWidth(window.innerWidth);
+    const handler = () => setWidth(window.innerWidth);
+    window.addEventListener("resize", handler);
+    return () => window.removeEventListener("resize", handler);
+  }, []);
+
+  return width;
+}
+
 type WireframeCornerOptions = "navbar" | "sidebar";
 
 type DeepPartial<T> = {
@@ -87,6 +86,7 @@ type DeepPartial<T> = {
 };
 
 export type WireframeConfig = {
+  mobileBreakpoint: number;
   safeAreas: boolean;
   cssVariables: Record<WireframeCSSVariables, string | number>;
   corners: {
@@ -348,7 +348,8 @@ function Wireframe({
     return null;
   }
 
-  const isMobile = windowWidth < WF_NAV_BREAKPOINT;
+  const isMobile =
+    windowWidth < (config?.mobileBreakpoint ?? defaults.mobileBreakpoint);
   const safeAreasEnabled = config?.safeAreas ?? defaults.safeAreas;
   const cssVars = { ...defaults.cssVariables, ...config?.cssVariables };
   const corners = {
