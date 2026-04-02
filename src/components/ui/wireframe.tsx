@@ -4,7 +4,7 @@ import type { ClassValue } from "clsx";
 import { createContext, useContext, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
-const WF_NAV_BREAKPOINT = 640; // matches --breakpoint-wf-nav: 40rem
+const WF_NAV_BREAKPOINT = 768;
 
 type WireframeContextValue = {
   windowWidth: number;

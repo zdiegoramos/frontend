@@ -6,7 +6,7 @@
 
 @theme {
   /* Breakpoint at which WireframeNav position="responsive" switches from bottom to top */
-  --breakpoint-wf-nav: 40rem;
+  --breakpoint-wf-nav: 48rem;
 }
 
 @theme inline {
