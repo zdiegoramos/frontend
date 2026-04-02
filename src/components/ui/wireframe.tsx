@@ -513,6 +513,73 @@ function WireframeNav({
 
 type WireframeSidebarPosition = "left" | "right";
 
+function WireframeSidebarHeader({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<"div">) {
+  return (
+    <div
+      className={cn("flex-none", className)}
+      data-slot="sidebar-header"
+      {...props}
+    >
+      {children}
+    </div>
+  );
+}
+
+function WireframeSidebarContent({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<"div">) {
+  return (
+    <div
+      className={cn(
+        "min-h-0 flex-1 overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+        className
+      )}
+      data-slot="sidebar-content"
+      {...props}
+    >
+      {children}
+    </div>
+  );
+}
+
+function WireframeSidebarGroup({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<"div">) {
+  return (
+    <div
+      className={cn("flex flex-col", className)}
+      data-slot="sidebar-group"
+      {...props}
+    >
+      {children}
+    </div>
+  );
+}
+
+function WireframeSidebarFooter({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<"div">) {
+  return (
+    <div
+      className={cn("flex-none", className)}
+      data-slot="sidebar-footer"
+      {...props}
+    >
+      {children}
+    </div>
+  );
+}
+
 function WireframeSidebar({
   className,
   children,
@@ -526,7 +593,7 @@ function WireframeSidebar({
   return (
     <div
       className={cn(
-        "fixed z-50 overflow-scroll [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+        "fixed z-50 flex flex-col overflow-hidden",
         position === "left"
           ? [
               [
@@ -568,6 +635,10 @@ export {
   Wireframe,
   WireframeNav,
   WireframeSidebar,
+  WireframeSidebarContent,
+  WireframeSidebarFooter,
+  WireframeSidebarGroup,
+  WireframeSidebarHeader,
   type WireframeSidebarPosition,
   WireframeStickyNav,
 };
